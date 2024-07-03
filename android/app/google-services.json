@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "32060790467",
+    "project_id": "chat-app-ffa4d",
+    "storage_bucket": "chat-app-ffa4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32060790467:android:6117235e4ba9e3188f3476",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN1HeyBJ4sgyLgTR7NQhlp4lESr8dglDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32060790467:android:4d3c5a21c5e428ac8f3476",
+        "android_client_info": {
+          "package_name": "com.example.weather_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN1HeyBJ4sgyLgTR7NQhlp4lESr8dglDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
