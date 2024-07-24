@@ -10,10 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ChatPage extends StatelessWidget {
   ChatPage({super.key});
   static String id = 'chat page';
+
   List<messageModel> messageList = [];
+
   /*CollectionReference messages =
       FirebaseFirestore.instance.collection(kMessagesCollections);*/
   TextEditingController controller = TextEditingController();
+
   ScrollController controller2 = ScrollController();
 
   @override
