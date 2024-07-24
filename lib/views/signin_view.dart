@@ -1,4 +1,4 @@
-import 'package:chat_app/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:chat_app/bloc/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
 import 'package:chat_app/helper/show_snak_bar.dart';
@@ -26,7 +26,7 @@ class SignInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBlocBloc, AuthBlocState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoginLoadingState) {
           isLoading = true;
@@ -102,7 +102,7 @@ class SignInView extends StatelessWidget {
                   SignButton(
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        BlocProvider.of<AuthBlocBloc>(context).add(LoginEvent(email: email!, password: password!));
+                        BlocProvider.of<AuthBloc>(context).add(LoginEvent(email: email!, password: password!));
                       }
                     },
                     text: 'Sign In',
