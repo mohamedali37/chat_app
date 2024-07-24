@@ -1,5 +1,5 @@
+import 'package:chat_app/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
-import 'package:chat_app/cubits/login%20cubit/login_cubit.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/views/chat_view.dart';
 import 'package:chat_app/views/signin_view.dart';
@@ -23,7 +23,7 @@ class ChatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => AuthBlocBloc()),
         BlocProvider(create: (context) => ChatCubit()),
       ],
       child: MaterialApp(

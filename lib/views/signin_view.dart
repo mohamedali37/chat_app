@@ -1,7 +1,6 @@
+import 'package:chat_app/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
-import 'package:chat_app/cubits/login%20cubit/login_cubit.dart';
-import 'package:chat_app/cubits/login%20cubit/login_state.dart';
 import 'package:chat_app/helper/show_snak_bar.dart';
 import 'package:chat_app/views/chat_view.dart';
 import 'package:chat_app/views/signup_view.dart';
@@ -27,7 +26,7 @@ class SignInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginCubit, LoginState>(
+    return BlocConsumer<AuthBlocBloc, AuthBlocState>(
       listener: (context, state) {
         if (state is LoginLoadingState) {
           isLoading = true;
@@ -103,8 +102,7 @@ class SignInView extends StatelessWidget {
                   SignButton(
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        BlocProvider.of<LoginCubit>(context)
-                            .signInUser(email: email!, password: password!);
+                        BlocProvider.of<AuthBlocBloc>(context).add(LoginEvent(email: email!, password: password!));
                       }
                     },
                     text: 'Sign In',
