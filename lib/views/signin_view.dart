@@ -1,4 +1,5 @@
 import 'package:chat_app/constants.dart';
+import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
 import 'package:chat_app/cubits/login%20cubit/login_cubit.dart';
 import 'package:chat_app/cubits/login%20cubit/login_state.dart';
 import 'package:chat_app/helper/show_snak_bar.dart';
@@ -31,6 +32,7 @@ class SignInView extends StatelessWidget {
         if (state is LoginLoadingState) {
           isLoading = true;
         } else if (state is LoginSuccessState) {
+          BlocProvider.of<ChatCubit>(context).getMessage();
           Navigator.pushNamed(context, ChatPage.id, arguments: email);
           isLoading = false;
         } else if (state is LoginFailureState) {
