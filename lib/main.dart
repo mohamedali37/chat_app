@@ -1,6 +1,7 @@
 import 'package:chat_app/bloc/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
 import 'package:chat_app/firebase_options.dart';
+import 'package:chat_app/simple_bloc_observer.dart';
 import 'package:chat_app/views/chat_view.dart';
 import 'package:chat_app/views/signin_view.dart';
 import 'package:chat_app/views/signup_view.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
+  Bloc.observer = SimpleBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
