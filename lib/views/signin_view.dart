@@ -1,7 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:chat_app/bloc/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
-import 'package:chat_app/helper/show_snak_bar.dart';
 import 'package:chat_app/views/chat_view.dart';
 import 'package:chat_app/views/signup_view.dart';
 import 'package:chat_app/widgets/sign_button.dart';
@@ -35,7 +35,14 @@ class SignInView extends StatelessWidget {
           Navigator.pushNamed(context, ChatPage.id, arguments: email);
           isLoading = false;
         } else if (state is LoginFailureState) {
-          ScafoldSnakBar(context, msg: state.err);
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.rightSlide,
+            title: 'Error',
+            desc: state.err
+            ).show();
+          //ScafoldSnakBar(context, msg: state.err);
           isLoading = false;
         }
       },

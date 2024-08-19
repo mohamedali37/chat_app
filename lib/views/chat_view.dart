@@ -2,7 +2,9 @@ import 'package:chat_app/constants.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_state.dart';
 import 'package:chat_app/models/message_model.dart';
+import 'package:chat_app/views/signin_view.dart';
 import 'package:chat_app/widgets/msg_chat.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,6 +52,15 @@ class ChatPage extends StatelessWidget {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () async{
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(SignInView.id, (route) => false);
+            }, 
+            icon: const Icon(Icons.exit_to_app_outlined)
+            )
+        ],
       ),
       body: Column(
         children: [

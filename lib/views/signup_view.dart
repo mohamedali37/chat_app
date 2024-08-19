@@ -96,7 +96,12 @@ class _SignUpViewState extends State<SignUpView> {
                         await signUpUser();
                         //ScafoldSnakBar(context, msg: 'succees');
                         // ignore: use_build_context_synchronously
-                        Navigator.pushNamed(context, ChatPage.id);
+                        if (FirebaseAuth.instance.currentUser!.emailVerified) {
+                          Navigator.pushNamed(context, ChatPage.id);
+                        } else {
+                          FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                          ScafoldSnakBar(context, msg: 'توجه الى البريد ');
+                        }
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
                           // ignore: use_build_context_synchronously
