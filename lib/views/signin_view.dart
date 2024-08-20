@@ -9,6 +9,7 @@ import 'package:chat_app/widgets/text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 // ignore: must_be_immutable
@@ -36,17 +37,17 @@ class SignInView extends StatelessWidget {
           isLoading = false;
         } else if (state is LoginFailureState) {
           AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            animType: AnimType.rightSlide,
-            title: 'Error',
-            desc: state.err
-            ).show();
+                  context: context,
+                  dialogType: DialogType.error,
+                  animType: AnimType.rightSlide,
+                  title: 'Error',
+                  desc: state.err)
+              .show();
           //ScafoldSnakBar(context, msg: state.err);
           isLoading = false;
         }
       },
-      builder: (context,state) => ModalProgressHUD(
+      builder: (context, state) => ModalProgressHUD(
         inAsyncCall: isLoading,
         child: Scaffold(
           backgroundColor: kPrimaryColor,
@@ -109,7 +110,8 @@ class SignInView extends StatelessWidget {
                   SignButton(
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        BlocProvider.of<AuthBloc>(context).add(LoginEvent(email: email!, password: password!));
+                        BlocProvider.of<AuthBloc>(context).add(
+                            LoginEvent(email: email!, password: password!));
                       }
                     },
                     text: 'Sign In',
@@ -137,8 +139,54 @@ class SignInView extends StatelessWidget {
                           ),
                         ),
                       ),
+                      GestureDetector(
+                        onTap: () {
+                          if (email == '') {
+                            AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.rightSlide,
+                                    title: 'Error',
+                                    desc:
+                                        'الرجاء كتابه الايميل ثم الضغط على forget password')
+                                .show();
+                            return;
+                          }
+                          try {
+                            FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: email!);
+                            AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.success,
+                                    animType: AnimType.rightSlide,
+                                    title: 'ٍSuccess',
+                                    desc:
+                                        'الرجاء التوجه الى بريدك الالكتروني وقم باعاده تغير كلمه السر الخاصه بك')
+                                .show();
+                          } catch (e) {
+                            AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.rightSlide,
+                                    title: 'Error',
+                                    desc: e.toString())
+                                .show();
+                          }
+                        },
+                        child: const Text(
+                          'Forget password?',
+                          style: TextStyle(
+                            color: Color(0xffc5e7e8),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
+                  SignButton(
+                      text: 'Sign in with google',
+                      onTap: () {
+                        signInWithGoogle(context);
+                      })
                 ],
               ),
             ),
@@ -154,5 +202,30 @@ class SignInView extends StatelessWidget {
       email: email!,
       password: password!,
     );
+  }
+
+  Future signInWithGoogle(context) async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser == null) {
+      return;
+    }
+
+    // Obtain the auth details from the request
+    
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(ChatPage.id, (route) => false);
   }
 }
