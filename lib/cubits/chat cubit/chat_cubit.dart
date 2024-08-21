@@ -12,7 +12,8 @@ class ChatCubit extends Cubit<ChatState> {
     messages.add({
       'message': msg,
       'created at': DateTime.now(),
-      'id': email,
+      'email': email,
+      'id' : messages.doc().id,
     });
   }
 
@@ -28,4 +29,6 @@ class ChatCubit extends Cubit<ChatState> {
       emit(ChatSuccessState(messageList: messageList));
     });
   }
+  // لانشاء مجموعه من الكوليكشن داخل دوكيومنت
+  //FirebaseFirestore.instance.collection(kMessagesCollections).doc(id).collection('note').get();
 }

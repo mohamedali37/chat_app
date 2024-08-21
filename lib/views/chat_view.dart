@@ -1,9 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_cubit.dart';
 import 'package:chat_app/cubits/chat%20cubit/chat_state.dart';
 import 'package:chat_app/models/message_model.dart';
 import 'package:chat_app/views/signin_view.dart';
 import 'package:chat_app/widgets/msg_chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,40 +57,68 @@ class ChatPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () async{
-              GoogleSignIn googleSignIn = GoogleSignIn();
-              googleSignIn.disconnect();
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(SignInView.id, (route) => false);
-            }, 
-            icon: const Icon(Icons.exit_to_app_outlined)
-            )
+              onPressed: () async {
+                GoogleSignIn googleSignIn = GoogleSignIn();
+                googleSignIn.disconnect();
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(SignInView.id, (route) => false);
+              },
+              icon: const Icon(Icons.exit_to_app_outlined))
         ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: BlocConsumer<ChatCubit, ChatState>(
-              listener: (context, state) {
-                if(state is ChatSuccessState) {
-                  messageList = state.messageList;
-                }
-              },
-              builder: (context, state) {
-                return ListView.builder(
-                    reverse: true,
-                    controller: controller2,
-                    itemCount: messageList.length,
-                    itemBuilder: (context, index) {
-                      return messageList[index].id == email
-                          ? MsgChat(
-                              message: messageList[index],
-                            )
-                          : MsgChatForFriend(message: messageList[index]);
-                    });
-              },
-            ),
-          ),
+              child: BlocConsumer<ChatCubit, ChatState>(
+                  listener: (context, state) {
+            if (state is ChatSuccessState) {
+              messageList = state.messageList;
+            }
+          }, builder: (context, state) {
+            return ListView.builder(
+                reverse: true,
+                controller: controller2,
+                itemCount: messageList.length,
+                itemBuilder: (context, index) {
+                  return messageList[index].email == email
+                      ? GestureDetector(
+                          onLongPress: () {
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.warning,
+                              animType: AnimType.rightSlide,
+                              title: 'Delete',
+                              desc: 'اختر ماذا تريد',
+                              btnCancelText: 'Delete',
+                              btnCancelOnPress: () async{
+                                await FirebaseFirestore.instance
+                                    .collection(kMessagesCollections)
+                                    .doc(messageList[index].id).delete();
+                              },
+                              btnOkText: 'Update',
+                              btnOkOnPress: () async {
+                                await FirebaseFirestore.instance.collection(kMessagesCollections).doc(messageList[index].id).update(
+                                  {                                  
+                                    'message' : messageList[index].message,
+                                  }
+                                );    
+                                await FirebaseFirestore.instance.collection(kMessagesCollections).doc('12359').set(
+                                  {
+                                    'message' : messageList[index].message,
+                                  },
+                                  SetOptions(merge: true),
+                                );    
+                              },
+                            ).show();
+                          },
+                          child: MsgChat(
+                            message: messageList[index],
+                          ),
+                        )
+                      : MsgChatForFriend(message: messageList[index]);
+                });
+          })),
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
