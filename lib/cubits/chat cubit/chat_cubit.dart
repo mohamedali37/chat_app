@@ -19,6 +19,7 @@ class ChatCubit extends Cubit<ChatState> {
 
   void getMessage() {
     messages
+        .where('message', isEqualTo: 'mkimijij')
         .orderBy('created at', descending: true)
         .snapshots()
         .listen((event) {
@@ -29,6 +30,15 @@ class ChatCubit extends Cubit<ChatState> {
       emit(ChatSuccessState(messageList: messageList));
     });
   }
-  // لانشاء مجموعه من الكوليكشن داخل دوكيومنت
+  // لعرض مجموعه من الكوليكشن داخل دوكيومنت
   //FirebaseFirestore.instance.collection(kMessagesCollections).doc(id).collection('note').get();
+
+  // لاضافة مجموعه من الكوليكشن داخل دوكيومنت
+  //FirebaseFirestore.instance.collection(kMessagesCollections).doc(id).collection('note');
+
+  // لتعديل الكوليكشن داخل دوكيومنت
+  //FirebaseFirestore.instance.collection(kMessagesCollections).doc(id).collection('note').doc(id).update({'note' : dsvdvsdvd});
+
+  // لحذف الكوليكشن داخل دوكيومنت
+  //FirebaseFirestore.instance.collection(kMessagesCollections).doc(id).collection('note').doc(id).delete();
 }
